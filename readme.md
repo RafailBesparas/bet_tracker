@@ -1,6 +1,6 @@
 # 🏆 Bet Tracking & Analysis Tool
 
-A practical Java Spring Boot web application for tracking and analyzing sports bets, inspired by real-world use cases like **Tipico**. This project allows users to add, manage, and analyze their betting history, all through a clean REST API and simple HTML frontend.
+A practical Java Spring Boot web application for tracking and analyzing sports bets, inspired by real-world use cases like **Betting or tracking**. This project allows users to add, manage, and analyze their betting history, all through a clean REST API and simple HTML frontend.
 
 ---
 
