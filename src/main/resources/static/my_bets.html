@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bets</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+        .profit {
+            margin-top: 20px;
+            text-align: right;
+            font-size: 18px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>My Bets</h2>
+    <table id="betsTable">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Sport</th>
+            <th>Team</th>
+            <th>Date</th>
+            <th>Stake</th>
+            <th>Odds</th>
+            <th>Won</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Bets will be inserted here -->
+        </tbody>
+    </table>
+    <div class="profit" id="profitSummary">Total Profit/Loss: €0.00</div>
+</div>
+
+<script>
+    async function loadBets() {
+        try {
+            const res = await fetch("http://localhost:8080/api/bets");
+            const bets = await res.json();
+            const tbody = document.querySelector("#betsTable tbody");
+
+            bets.forEach(bet => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${bet.id}</td>
+                    <td>${bet.sport}</td>
+                    <td>${bet.team}</td>
+                    <td>${bet.date}</td>
+                    <td>€${bet.stake.toFixed(2)}</td>
+                    <td>${bet.odds}</td>
+                    <td>${bet.won ? '✅' : '❌'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        } catch (err) {
+            console.error("Error loading bets:", err);
+        }
+    }
+
+    async function loadProfit() {
+        try {
+            const res = await fetch("http://localhost:8080/api/bets/profit");
+            const profit = await res.text();
+            document.getElementById("profitSummary").textContent = `Total Profit/Loss: €${parseFloat(profit).toFixed(2)}`;
+        } catch (err) {
+            console.error("Error loading profit:", err);
+        }
+    }
+
+    // Load data on page load
+    loadBets();
+    loadProfit();
+</script>
+</body>
+</html>
